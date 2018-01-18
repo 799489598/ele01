@@ -13,10 +13,18 @@
     props:{
       pageId:String
     },
+    methods: {
+      //需要让页面刷新滚动
+      pageRefresh(){
+        this.pageScroll.refresh();
+      }
+    },
     mounted(){
-      let pageScroll=new IScroll(this.$refs.page,{
-
-      })
+      //创建页面的滚动视图
+      this.pageScroll=new IScroll(this.$refs.page,{
+      });
+      //让页面可以滚动
+      this.pageScroll.on('scrollStart', this.pageRefresh);
     }
   }
 </script>

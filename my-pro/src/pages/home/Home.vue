@@ -1,10 +1,10 @@
 <template>
   <div>
     <!--首页面-->
-    <page pageId='home'>
+    <page pageId='home' ref=page>
       <home-header></home-header>
       <home-banner></home-banner>
-      <home-list></home-list>
+      <home-list @list-change="handleListChange"></home-list>
     </page>
     <!--装载子页面-->
     <router-view></router-view>
@@ -22,6 +22,12 @@
       [Header.name]:Header,
       [Banner.name]:Banner,
       [List.name]:List,
+    },
+    methods:{
+      handleListChange(){
+        //刷新页面
+        this.$refs.page.pageRefresh();
+      }
     }
   }
 </script>

@@ -1,8 +1,18 @@
 <template>
-  <header>
-    <div>福三中中深圳实名中心</div>
-    <div>
+  <header class="header">
+    <div class="header-top">福三中中深圳实名中心</div>
+    <div class="header-center">
       搜索商家，商品名称
+    </div>
+    <div class="header-bottom">
+      <li>雨</li>
+      <li>毛巾</li>
+      <li>奶茶</li>
+      <li>5折美食汇</li>
+      <li>冒菜</li>
+      <li>黄茶</li>
+      <li>口水鸡</li>
+      <li>辣子鸡</li>
     </div>
   </header>
 </template>
@@ -15,8 +25,39 @@
 
 <style scoped>
   .header{
-    width: 100%;
-    height: 80px;
-    background: #0085ff;
+    width:100%;
+    height: 125px;
+    background: #009aff;
+    padding: 0px 15px;
+    box-sizing: border-box;
   }
+  .header-top{
+    width:100%;
+    height: 44px;
+    font-size: 16px;
+    font-weight: 900;
+    color: #fffef6;
+    line-height: 44px;
+
+  }
+  .header-center{
+    width:100%;
+    height: 36px;
+    color: #bbbbbb;
+    background: #fff;
+    font-size: 12px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 3px;
+  }
+  .header-bottom{
+    width:100%;
+    height: 34px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 34px;
+    display: flex;
+    justify-content: space-around;
+  }
+
 </style>

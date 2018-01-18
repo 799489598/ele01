@@ -19,14 +19,12 @@ html,body,#app{
   height: 1px;
   border-top: 1px solid #000;
   transform: scaleY(0.5);
-  background: #000;
 }
 
 .one-bottom-px{
   position: relative;
 }
 .one-bottom-px:after{
-  background: #000;
   position: absolute;
   bottom: -1px;
   left: 0;
