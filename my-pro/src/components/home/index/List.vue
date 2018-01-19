@@ -1,4 +1,5 @@
 <template>
+
   <ul class="seller">
     <p>推荐商家</p>
     <li class="one-top-px seller-list" v-for="(lists,index) in sellerList" :key="index">
@@ -35,16 +36,35 @@
     data(){
       return {
         sellerList:[],
+        limit: 12//一次请求的数据总长度
+      }
+    },
+    computed:{
+      offset(){
+        //告诉后台一次请求数据的长度
+        return this.sellerList.length;
       }
     },
     mounted(){
-      getHomeSeller(22.54286, 114.059563, 0, 8)
-        .then(result=>{
-          this.sellerList=result;
-
-        })
+      //加载的时候，直接请求数据
+      this.requestData()
     },
     methods:{
+      //请求数据的方法
+      requestData(collbakc){
+        getHomeSeller(22.54286, 114.059563, this.offset,this.limit)
+          .then(result=>{
+            //第一次进入的时候面试加载第一次的数据，
+            //第二次加载的数据需要和第一次加载的数据合并起来
+            this.sellerList=this.sellerList.concat(result);
+            //请求完成以后，需要停止加载更多的画面
+            this.$nextTick(()=>{
+              if(collbakc){
+                collbakc();
+              }
+            })
+          });
+      },
       //列表展开查看活动的事件
       showActAction(index){
         this.sellerList[index].isShow=!this.sellerList[index].isShow;
@@ -58,7 +78,6 @@
     components:{
       [ChartIcon.name]:ChartIcon
     }
-
   }
 </script>
 

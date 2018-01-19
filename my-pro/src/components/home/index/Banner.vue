@@ -22,7 +22,6 @@
 
 <script>
   import {getBannerdata} from '../../../service/HomeService';
-  import {handleImage} from '../../../util/handleImages';
   export default {
     name:'home-banner',
     data(){
