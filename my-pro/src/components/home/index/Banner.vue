@@ -22,6 +22,7 @@
 
 <script>
   import {getBannerdata} from '../../../service/HomeService';
+  import Vuex from 'vuex';
   export default {
     name:'home-banner',
     data(){
@@ -29,9 +30,16 @@
         bannerData:''
       }
     },
+    computed: {
+      ...Vuex.mapState({
+        lat: 'latitude',
+        lon: 'longitude'
+      })
+    },
     methods:{
       infited(){
-        getBannerdata('22.54286','114.059563',['main_template','favourable_template','svip_template'])
+        //把全局状态数据变成自己组件的值传递给ajax请求
+        getBannerdata(this.lat, this.lon,['main_template','favourable_template','svip_template'])
           .then(res=>{
             //把请求的数据放到this.bannerData中，在dom结构中显示
             this.bannerData=res;
@@ -44,13 +52,23 @@
 
     },
     mounted(){
+      //初始化定位：
+      if(this.lat && this.lon){
+        this.infited();
+      };
+      //监听经纬度的变化，变化时，也要请求数据
+      this.$watch('lat',()=>{
+        if(this.lat && this.lon){
+          this.infited();
+        };
+      })
+
       // 创建swiper对象,挂靠在组件对象上
       this.bannerSwiper = new Swiper(this.$refs.disBannerTop, {
         pagination: '.swiper-pagination'
       });
-      //去请求数据
-      this.infited();
-    }
+
+    },
   }
 </script>
 
@@ -61,7 +79,6 @@
   }
   .divBanner-top{
     width: 100%;
-
   }
 
   .banner{

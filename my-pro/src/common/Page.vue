@@ -24,12 +24,15 @@ const ACTIVE = 2;
       return {
         isDown: NO_TRIGGER,//0 没有触发加载更多   1触发了加载更多  2 正在加载更多
         downInfo: '上拉可以加载更多11',
-        imgPath:'/static/img/arrow.png'
+        imgPath:'/static/img/arrow.png',
+        firstload2:false,
       }
     },
     props:{
       pageId:String,
-      canLoadMore:Boolean
+      canLoadMore:Boolean,
+
+      headerName:Object,   //头部发现，我的和订单导航栏
     },
     methods: {
       //需要让页面刷新滚动
@@ -41,7 +44,13 @@ const ACTIVE = 2;
         this.isDown=NO_TRIGGER;
         this.downInfo='上拉可以加载更多11';
         this.imgPath='/static/img/arrow.png'
-      }
+      },
+
+    },
+    created(){
+      this.$on('first-load',(val)=>{
+        this.firstload2=val;
+      })
     },
     mounted(){
       //创建页面的滚动视图
@@ -52,45 +61,44 @@ const ACTIVE = 2;
       //让页面可以滚动
       this.pageScroll.on('scrollStart', this.pageRefresh);
 
-
-      if(this.canLoadMore){
-        //上拉dom结构的样式显示
-        let that=this;
-        this.pageScroll.on("scroll",function () {
-          if(that.isDown !=ACTIVE){  //不在加载中的时候才可以有这个操作
-            let maxY=this.maxScrollY;  //获取最大滚动值
-            let y=this.y;   //获取当前的滚动值
-            //显示上拉加载更多  maxY< y < maxY+40（如果在这之间放开了，回到maxy+40的位置）
-            //显示释放立即加载  maxY>y （如果在这放开了，就显示加载更多）
-            if(y>maxY){
-              that.downInfo='上拉可以加载更多';
-              that.isDown=NO_TRIGGER;
-            }else if(maxY>y){
-              that.downInfo='释放立即加载更多';
-              that.isDown=TRIGGER;
+      //上拉加载更多
+        if (this.canLoadMore) {
+          //上拉dom结构的样式显示
+          let that = this;
+          this.pageScroll.on("scroll", function () {
+            if (that.isDown != ACTIVE) {  //不在加载中的时候才可以有这个操作
+              let maxY = this.maxScrollY;  //获取最大滚动值
+              let y = this.y;   //获取当前的滚动值
+              //显示上拉加载更多  maxY< y < maxY+40（如果在这之间放开了，回到maxy+40的位置）
+              //显示释放立即加载  maxY>y （如果在这放开了，就显示加载更多）
+              if (y > maxY) {
+                that.downInfo = '上拉可以加载更多';
+                that.isDown = NO_TRIGGER;
+              } else if (maxY > y) {
+                that.downInfo = '释放立即加载更多';
+                that.isDown = TRIGGER;
+              }
             }
-          }
-        });
-        //手指移开的时候
-        this.pageScroll.on('scrollEnd',()=>{
-          if(that.isDown !=ACTIVE){  //正在加载的时候不用再次加载
-            let maxY=that.pageScroll.maxScrollY;  //获取最大滚动值
-            let y=that.pageScroll.y;   //获取当前的滚动值
-            console.log(maxY);
-            if(y>maxY &&y<maxY+40){  //没有触发加载更多
-              that.downInfo='上拉可以加载更多';
-              that.isDown=NO_TRIGGER;
-              that.pageScroll.scrollTo(0,maxY+40,200);
-            }else if(maxY>=y){   //触发了加载更多
-              that.isDown=ACTIVE;
-              that.imgPath = '/static/img/ajax-loader.gif'
-              that.downInfo='正在加载';
-              //告诉home组件去请求数据
-              that.$emit('load-more-action');
+          });
+          //手指移开的时候
+          this.pageScroll.on('scrollEnd', () => {
+            if (that.isDown != ACTIVE) {  //正在加载的时候不用再次加载
+              let maxY = that.pageScroll.maxScrollY;  //获取最大滚动值
+              let y = that.pageScroll.y;   //获取当前的滚动值
+              if (y > maxY && y < maxY + 40) {  //没有触发加载更多
+                that.downInfo = '上拉可以加载更多';
+                that.isDown = NO_TRIGGER;
+                that.pageScroll.scrollTo(0, maxY + 40, 200);
+              } else if (maxY >= y) {   //触发了加载更多
+                that.isDown = ACTIVE;
+                that.imgPath = '/static/img/ajax-loader.gif'
+                that.downInfo = '正在加载';
+                //告诉home组件去请求数据
+                that.$emit('load-more-action');
+              }
             }
-          }
-        })
-      }
+          })
+        }
 
       //home组件需要监听页面的滚动
       this.pageScroll.on("scroll",()=>{

@@ -1,5 +1,5 @@
 <template>
-  <sub-page pageId='detail'>
+  <sub-page pageId='address'>
     <h1>页面详情</h1>
   </sub-page>
 
@@ -13,3 +13,11 @@
     }
   }
 </script>
+
+<style scoped>
+h1{
+  background: red;
+  width: 100%;
+  height: 100%;
+}
+</style>

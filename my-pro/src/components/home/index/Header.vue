@@ -1,6 +1,10 @@
 <template>
   <header class="header">
-    <div class="header-top">福三中中深圳实名中心</div>
+
+      <div class="header-top" @click="addressAction()">{{address}}</div>
+
+
+
     <div class="header-center">
       搜索商家，商品名称
     </div>
@@ -18,8 +22,45 @@
 </template>
 
 <script>
+  import {getLoaction} from '../../../service/HomeService';
+  import Vuex from 'vuex';
   export default {
-    name:'home-header'
+    name:'home-header',
+    data(){
+      return {
+        address:''
+      }
+    },
+    computed: {
+      ...Vuex.mapState({
+        lat: 'latitude',
+        lon: 'longitude'
+      })
+    },
+    methods:{
+      requestData(){
+        //请求当前地址
+        getLoaction(this.lat,this.lon).then((result)=>{
+          this.address=result;
+        })
+      },
+      //跳转到搜索地址页面
+      addressAction(){
+        this.$router.push('/home/address')
+      }
+    },
+    mounted(){
+      //初始化定位：
+      if(this.lat && this.lon){
+        this.requestData();
+      };
+      //监听经纬度的变化，变化时，也要请求数据
+      this.$watch('lat',()=>{
+        if(this.lat && this.lon){
+          this.requestData();
+        };
+      })
+    }
   }
 </script>
 

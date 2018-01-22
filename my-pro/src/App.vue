@@ -17,6 +17,12 @@ export default {
   name: 'App',
   components:{
     [Tabs.name]:Tabs
+  },
+  created(){
+    this.$store.dispatch('getLocationAction',{
+      lat:22.54286,
+      lon:114.059563
+    })
   }
 }
 </script>

@@ -14,15 +14,15 @@ import {handleImage} from '../util/handleImages';
 //   })
 
 
+
+
 // https://h5.ele.me
-// /restapi/shopping/openapi/entries
-// latitude=22.54286
-// longitude=114.059563
-// templates[]=main_template
-// templates[]=favourable_template
+//   /restapi/shopping/openapi/entries
+//   ?latitude=22.54286&
+// longitude=114.059563&
+// templates[]=main_template&
+// templates[]=favourable_template&
 // templates[]=svip_template
-
-
 
 //请求banner的函数：（并返回出去）
 export function getBannerdata(lat,lon,tmp) {
@@ -58,15 +58,15 @@ export function getBannerdata(lat,lon,tmp) {
 
 // 推荐商家列表
 // https://h5.ele.me
-//   /restapi/shopping/v3/restaurants
-// latitude=22.54286
-// longitude=114.059563
-// offset=0&limit=8
-// extras[]=activities
-// extras[]=tags
-// extra_filters=home
-// rank_id=1049ebe36fb3410babb923a640135d22
-// terminal=h5
+// /restapi/shopping/v3/restaurants
+//   ?latitude=22.54286&
+//   longitude=114.059563&
+//   offset=0&limit=8&
+//   extras[]=activities&
+//   extras[]=tags&
+//   extra_filters=home&
+//   rank_id=984553df2830414c9058eaff4b63bbaa&
+//   terminal=h5
 export function getHomeSeller(lat,lon,offset,limit) {
   return new Promise((resolve, reject)=>{
     axios.get(Api.LISTT_URL, {
@@ -105,6 +105,51 @@ export function getHomeSeller(lat,lon,offset,limit) {
       });
   })
 }
+
+
+//首页地址定位
+export function getLoaction(lat,lon) {
+  return new Promise((resolve,reject)=>{
+    axios.get(Api.LOCATION_URL, {
+      params: {
+        latitude:lat,
+        longitude:lon
+      }
+    }).then(function (response) {
+      resolve(response.data.name);
+      }).catch(function (error) {
+      
+      });
+  })
+}
+
+
+
+// 搜索地址的请求
+//    https://h5.ele.me
+//   /restapi/bgs/poi/search_poi_nearby
+//   ?keyword=%E6%B7%B1%E5%9C%B3&offset=0&limit=20&latitude=22.54286&longitude=114.059563
+
+export function searchAddressList(keyword,offset,limit,lat,lon) {
+  return new Promise((resolve,reject)=>{
+    axios.get(Api.LOCATION_URL, {
+      params: {
+        keyword,
+        offset,
+        limit,
+        latitude:lat,
+        longitude:lon
+      }
+    }).then(function (response) {
+      resolve(response);
+    }).catch(function (error) {
+    
+    });
+  })
+
+}
+
+
 
 
 

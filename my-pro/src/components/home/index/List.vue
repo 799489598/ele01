@@ -9,7 +9,7 @@
       <div class="seller-left">
         <div class="info">
           <h2>{{lists.name}}</h2>
-          <p>{{lists.rating}}</p>
+          <p><star-icon :rating="lists.rating" ref="star"></star-icon>{{lists.rating}}</p>
           <p>￥{{lists.rules[0].price}}起送 | 配送费{{lists.rules[0].fee}}</p>
         </div>
         <div class="activities" v-if="lists.activities">
@@ -31,32 +31,54 @@
 <script scoped>
   import {getHomeSeller} from '../../../service/HomeService';
   import ChartIcon from '../../../common/ChartIcon.vue';
+  import Star from '../../../common/Star.vue';
+  import Vuex from 'vuex';
   export default {
     name:'home-list',
     data(){
       return {
         sellerList:[],
-        limit: 12//一次请求的数据总长度
+        limit: 12,  //一次请求的数据总长度
       }
     },
     computed:{
+      //把全局状态数据变成自己的数据，并且随着去阿奴状态的改变而改变
+      ...Vuex.mapState({
+        lat: 'latitude',
+        lon: 'longitude'
+      }),
       offset(){
         //告诉后台一次请求数据的长度
         return this.sellerList.length;
       }
     },
     mounted(){
-      //加载的时候，直接请求数据
-      this.requestData()
+      //初始化定位：
+      if(this.lat && this.lon){
+        //并且把数据列表清空
+        this.sellerList=[];
+        this.requestData();
+      };
+      //监听太全局状态中经纬度的值发生改变的时候，去请求数据
+      this.$watch('lat',()=>{
+        if(this.lat && this.lon){
+          //并且把数据列表清空
+          this.sellerList=[];
+
+          this.requestData();
+        };
+      })
     },
     methods:{
       //请求数据的方法
       requestData(collbakc){
-        getHomeSeller(22.54286, 114.059563, this.offset,this.limit)
+        getHomeSeller(this.lat, this.lon, this.offset,this.limit)
           .then(result=>{
             //第一次进入的时候面试加载第一次的数据，
             //第二次加载的数据需要和第一次加载的数据合并起来
             this.sellerList=this.sellerList.concat(result);
+
+            //把数据让评分有值
             //请求完成以后，需要停止加载更多的画面
             this.$nextTick(()=>{
               if(collbakc){
@@ -76,7 +98,8 @@
       }
     },
     components:{
-      [ChartIcon.name]:ChartIcon
+      [ChartIcon.name]:ChartIcon,
+      [Star.name]:Star
     }
   }
 </script>
