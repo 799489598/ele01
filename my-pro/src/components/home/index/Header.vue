@@ -1,10 +1,6 @@
 <template>
   <header class="header">
-
       <div class="header-top" @click="addressAction()">{{address}}</div>
-
-
-
     <div class="header-center">
       搜索商家，商品名称
     </div>
@@ -28,20 +24,22 @@
     name:'home-header',
     data(){
       return {
-        address:''
+
       }
     },
     computed: {
       ...Vuex.mapState({
         lat: 'latitude',
-        lon: 'longitude'
+        lon: 'longitude',
+        address:'address'
       })
     },
     methods:{
       requestData(){
         //请求当前地址
         getLoaction(this.lat,this.lon).then((result)=>{
-          this.address=result;
+
+          this.$store.dispatch('modifyAddressAction',result);
         })
       },
       //跳转到搜索地址页面

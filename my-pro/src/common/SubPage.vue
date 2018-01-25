@@ -15,6 +15,7 @@
 
 <style>
   .subpage{
+    background: #f2f2f2;
     width: 100%;
     position: absolute;
     top: 0px;

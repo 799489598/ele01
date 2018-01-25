@@ -132,7 +132,7 @@ export function getLoaction(lat,lon) {
 
 export function searchAddressList(keyword,offset,limit,lat,lon) {
   return new Promise((resolve,reject)=>{
-    axios.get(Api.LOCATION_URL, {
+    axios.get(Api.SEARCH_ADDRESS_URL, {
       params: {
         keyword,
         offset,
@@ -141,7 +141,15 @@ export function searchAddressList(keyword,offset,limit,lat,lon) {
         longitude:lon
       }
     }).then(function (response) {
-      resolve(response);
+      let ful=response.data.map(result=>{
+        return {
+          name:result.name,
+          lat:result.latitude,
+          lon:result.longitude,
+          addres:result.address,
+        }
+      })
+      resolve(ful);
     }).catch(function (error) {
     
     });

@@ -61,10 +61,11 @@
       };
       //监听太全局状态中经纬度的值发生改变的时候，去请求数据
       this.$watch('lat',()=>{
+
         if(this.lat && this.lon){
+          console.log('list重新请求了')
           //并且把数据列表清空
           this.sellerList=[];
-
           this.requestData();
         };
       })
@@ -76,8 +77,7 @@
           .then(result=>{
             //第一次进入的时候面试加载第一次的数据，
             //第二次加载的数据需要和第一次加载的数据合并起来
-            this.sellerList=this.sellerList.concat(result);
-
+              this.sellerList=this.sellerList.concat(result);
             //把数据让评分有值
             //请求完成以后，需要停止加载更多的画面
             this.$nextTick(()=>{

@@ -58,7 +58,9 @@
       };
       //监听经纬度的变化，变化时，也要请求数据
       this.$watch('lat',()=>{
+
         if(this.lat && this.lon){
+          console.log('banner重新请求了')
           this.infited();
         };
       })

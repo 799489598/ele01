@@ -9,7 +9,9 @@ const store=new Vuex.Store({
     //纬度
     latitude:null,
     // 经度
-    longitude:null
+    longitude:null,
+    //当前地址
+    address:''
   },
   //全局计算状态
   getters:{
@@ -26,16 +28,26 @@ const store=new Vuex.Store({
     modifyLonitude(state, param){
       console.log('纬度modifyLonitude触发了');
       state.longitude=param;
+    },
+    //修改当前地址
+    modifyAddress(state,addres){
+      console.log('修改地址的modifyAddress触发了');
+      state.address=addres;
     }
   },
   
   //一系列逻辑判断并调用mutations属性的方法去修改全局状态
   actions:{
+    //修改经纬度
     getLocationAction(context, action){
       setTimeout(()=>{
         context.commit('modifylatitude', action.lat);
         context.commit('modifyLonitude', action.lon);
       },3000)
+    },
+    // 修改当前地址
+    modifyAddressAction(context,address){
+      context.commit('modifyAddress',address);
     }
   },
   
